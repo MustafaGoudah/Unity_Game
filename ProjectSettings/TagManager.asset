@@ -7,6 +7,7 @@ TagManager:
   - Blue Sphere
   - Coin
   - GreySphere
+  - RedSphere
   layers:
   - Default
   - TransparentFX

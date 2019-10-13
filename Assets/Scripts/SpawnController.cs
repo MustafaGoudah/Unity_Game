@@ -63,20 +63,26 @@ public class SpawnController: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (player.transform.position.z > (spawnZ - noOfTilesOnScreen * tileLength))
-        {
-            SpawnRoad();
-        }
 
-        collectibleTimeElapsed += Time.deltaTime;
-        if (collectibleTimeElapsed > collectibleCycle)
+        if (!(gameController.GameOver || gameController.GamePaused))
         {
-            SpawnCollectible();
-           
-            collectibleTimeElapsed -= collectibleCycle;
+
+
+            if (player.transform.position.z > (spawnZ - noOfTilesOnScreen * tileLength))
+            {
+                SpawnRoad();
+            }
+
+            collectibleTimeElapsed += Time.deltaTime;
+            if (collectibleTimeElapsed > collectibleCycle)
+            {
+                SpawnCollectible();
+
+                collectibleTimeElapsed -= collectibleCycle;
+            }
+            CleanMemory();
+
         }
-        CleanMemory();
     }
 
     private void SpawnRoad()
