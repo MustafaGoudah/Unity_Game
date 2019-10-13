@@ -7,11 +7,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
     private GameController gameController;
     private SpawnController SpawnController;
-    public float forwardSpeed;
-    public float jumpSpeed;
-    public Vector3 movement;
     public float gravity;
-    public float speed;
     public float timerValue;
     public float invincibleTimer;
     public bool invincible;
@@ -21,6 +17,14 @@ public class PlayerController : MonoBehaviour
     public Camera SecondryCamera;
     public bool firstPerson;
     public bool thirdPesrson;
+    public float laneWidth;
+    private int laneIndex;
+
+    public float playerSpeed;
+    public float playerJumpHeight;
+    public float changeLaneSpeed;
+    private Vector3 velocity;
+
 
 
 
@@ -32,25 +36,67 @@ public class PlayerController : MonoBehaviour
         mainCamera.gameObject.SetActive(thirdPesrson);
         SecondryCamera.gameObject.SetActive(firstPerson);
         score = 0;
-        gravity = 20.0f;
-        jumpSpeed = 8.0f;
-        speed = 100.0f;
         invincible = false;
         characterController = GetComponent<CharacterController>();
+        laneIndex = 0;
         gameController = GameController.Instance;
         SpawnController = SpawnController.Instance;
-        forwardSpeed = 50f;
         timerValue = 60.0f;
         invincibleTimer = 10.0f;
-       
         boostMeter = 0;
-        
+        laneWidth = 3.5f;
+
+        playerSpeed = 30f;
+        playerJumpHeight = 3f;
+        changeLaneSpeed = 10f;
+
+
     }
-    void Update()
+
+    void move()
+    {
+        if (Input.GetButtonDown("Horizontal"))
+        {
+            laneIndex += (int)Input.GetAxisRaw("Horizontal");
+
+        }
+
+        if (characterController.isGrounded)
+        {
+            velocity = Vector3.forward * playerSpeed;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                velocity.y = Mathf.Sqrt(2 * gravity * playerJumpHeight);
+            }
+        }
+        velocity.y -= gravity * Time.deltaTime;
+
+        Vector3 moveAmount = velocity * Time.deltaTime;
+        float targetX = laneIndex * laneWidth;
+        float dirX = Mathf.Sign(targetX - transform.position.x);
+        float deltaX = changeLaneSpeed * dirX * Time.deltaTime;
+
+        // Correct for overshoot
+        if (Mathf.Sign(targetX - (transform.position.x + deltaX)) != dirX)
+        {
+            float overshoot = targetX - (transform.position.x + deltaX);
+            deltaX += overshoot;
+        }
+        moveAmount.x = deltaX;
+
+        characterController.Move(moveAmount);
+    }
+
+void Update()
     {
         if (!(gameController.GameOver || gameController.GamePaused))
         {
-
+            if (timerValue <= 0)
+            {
+                timerValue = 0;
+                gameController.GameOver = true;
+            }
             mainCamera.gameObject.SetActive(thirdPesrson);
             SecondryCamera.gameObject.SetActive(firstPerson);
 
@@ -60,7 +106,7 @@ public class PlayerController : MonoBehaviour
                 thirdPesrson = !thirdPesrson;
             }
 
-            score = this.transform.position.z;
+            score = (int)this.transform.position.z;
             if (timerValue > 0)
             {
                 timerValue -= Time.deltaTime;
@@ -90,6 +136,7 @@ public class PlayerController : MonoBehaviour
                 invincible = false;
                 invincibleTimer = 10.0f;
             }
+            move();
         }
 
     }
@@ -112,10 +159,10 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-       
- 
+
+
         other.gameObject.SetActive(false);
-        
+
     }
 
     private void OnCoinCollected()
@@ -146,35 +193,42 @@ public class PlayerController : MonoBehaviour
         {
             boostMeter += 10;
         }
-       
+
     }
 
     // Update is called once per frame
-  
+
     private void FixedUpdate()
     {
         if (!(gameController.GameOver || gameController.GamePaused))
         {
-            if (characterController.isGrounded)
-            {
+            /*  if (characterController.isGrounded)
+              {
 
-                float horizontalAxis = Input.GetAxis("Horizontal");
+                  float horizontalAxis = Input.GetAxis("Horizontal");
 
-                movement = new Vector3(horizontalAxis, 0.0f, forwardSpeed);
-                movement.x *= speed;
-                movement.y *= speed;
-                if (Input.GetButton("Jump"))
-                {
-                    Debug.Log("jump");
-                    movement.y = jumpSpeed;
+                  movement = new Vector3(horizontalAxis, 0.0f, forwardSpeed);
+                  movement.x *= speed;
+                  movement.y *= speed;
+                  if (Input.GetButton("Jump"))
+                  {
 
-                }
+                      movement.y = jumpSpeed;
+
+                  }
 
 
-            }
-            movement.y -= gravity * Time.deltaTime;
+              }
+              movement.y -= gravity * Time.deltaTime;
 
-            characterController.Move(movement * Time.deltaTime);
+              characterController.Move(movement * Time.deltaTime);*/
+
+
         }
+
+
+
     }
+
 }
+
