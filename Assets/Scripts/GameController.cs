@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     private static GameController instance;
     private PlayerController playerController;
     private SpawnController spawnController;
+    private MusicController musicController;
     public GameObject player;
     public Text timerText;
     public Text boostMeterText;
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour
     public bool GamePaused;
     public GameObject gameOverMenu;
     public GameObject pauseMenu;
+
 
 
     // Start is called before the first frame update
@@ -51,20 +53,25 @@ public class GameController : MonoBehaviour
         boostMeterText.text = playerController.boostMeter.ToString();
         ScoreText.text = playerController.score.ToString();
         spawnController = SpawnController.Instance;
+        musicController = MusicController.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!GameOver)
-        {
-
-
+        { 
 
             ScoreText.text = playerController.score.ToString();
             timerText.text = playerController.timerValue.ToString("F");
 
             boostMeterText.text = playerController.boostMeter.ToString();
+
+            if (!playerController.alive)
+            {
+                gameOver();
+                return;
+            }
 
             if (Input.GetKeyUp(KeyCode.Escape))
             {
@@ -79,20 +86,24 @@ public class GameController : MonoBehaviour
             }
         }
 
-        else
-        {
-            this.gameOverMenu.SetActive(true);
-        }
     }
 
+    void gameOver()
+    {
+        GameOver = true;
+        this.gameOverMenu.SetActive(true);
+        musicController.PlayMenuMusic();
+    }
     public void Resume()
     {
+        musicController.PlayGameMusic();
         this.GamePaused = false;
         this.pauseMenu.SetActive(false);
     }
 
     public void Pause()
     {
+        musicController.PlayMenuMusic();
         this.GamePaused = true;
         this.pauseMenu.SetActive(true);
     }

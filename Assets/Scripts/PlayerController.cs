@@ -19,11 +19,16 @@ public class PlayerController : MonoBehaviour
     public bool thirdPesrson;
     public float laneWidth;
     private int laneIndex;
+    public bool alive;
 
     public float playerSpeed;
     public float playerJumpHeight;
     public float changeLaneSpeed;
     private Vector3 velocity;
+    public AudioSource audioSource;
+    public AudioClip coinsSound;
+    public AudioClip pointSound;
+    public AudioClip hitSound;
 
 
 
@@ -31,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        alive = true;
         firstPerson = false;
         thirdPesrson = true;
         mainCamera.gameObject.SetActive(thirdPesrson);
@@ -38,6 +44,7 @@ public class PlayerController : MonoBehaviour
         score = 0;
         invincible = false;
         characterController = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>(); 
         laneIndex = 0;
         gameController = GameController.Instance;
         SpawnController = SpawnController.Instance;
@@ -155,7 +162,8 @@ void Update()
                 OnBlueSphereCollected();
                 break;
             case "RedSphere":
-                gameController.GameOver = true;
+                audioSource.PlayOneShot(hitSound);
+                alive = false;
                 break;
         }
 
@@ -167,13 +175,13 @@ void Update()
 
     private void OnCoinCollected()
     {
-        if (!invincible)
+
+        if (timerValue > 0)
         {
-            if (timerValue > 0)
-            {
-                timerValue += 2.0f;
-            }
+            timerValue += 2.0f;
+            audioSource.PlayOneShot(coinsSound);
         }
+        
     }
 
     private void OnGreySphereCollected()
@@ -184,15 +192,17 @@ void Update()
             {
                 timerValue -= 10.0f;
             }
+            audioSource.PlayOneShot(hitSound);
         }
     }
 
     private void OnBlueSphereCollected()
     {
-        if (!invincible)
-        {
+            
             boostMeter += 10;
-        }
+        audioSource.PlayOneShot(pointSound);
+
+        
 
     }
 
