@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     public bool GamePaused;
     public GameObject gameOverMenu;
     public GameObject pauseMenu;
+    public bool inInvincibleMode;
 
 
 
@@ -45,7 +46,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-  
+        inInvincibleMode = false;
         GameOver = false;
         GamePaused = false;
         playerController = player.GetComponent<PlayerController>();
@@ -84,6 +85,13 @@ public class GameController : MonoBehaviour
                     Pause();
                 }
             }
+
+            if(playerController.invincible && inInvincibleMode)
+            {
+                Invincible();
+            }
+
+
         }
 
     }
@@ -93,6 +101,12 @@ public class GameController : MonoBehaviour
         GameOver = true;
         this.gameOverMenu.SetActive(true);
         musicController.PlayMenuMusic();
+    }
+
+    void Invincible()
+    {
+        inInvincibleMode = false;
+        musicController.PlayInvincibleMusic();
     }
     public void Resume()
     {

@@ -1511,6 +1511,7 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: aac80f18a8558e346849fd58f8a3ec6d, type: 3}
   gameMusic: {fileID: 8300000, guid: 228927e1410b03f43bda027da91a6495, type: 3}
   source: {fileID: 1589824772}
+  invincibleMusic: {fileID: 8300000, guid: fdb64db6ac2297f4a83cfc97b788aff9, type: 3}
 --- !u!1 &1504287069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2420,6 +2421,7 @@ MonoBehaviour:
   firstPerson: 0
   thirdPesrson: 0
   laneWidth: 0
+  alive: 0
   playerSpeed: 0
   playerJumpHeight: 0
   changeLaneSpeed: 0

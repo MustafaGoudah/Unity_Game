@@ -8,6 +8,8 @@ public class MusicController : MonoBehaviour
     public AudioClip menuMusic;
     public AudioClip gameMusic;
     public AudioSource source;
+    public AudioClip invincibleMusic;
+    public bool isMuted;
     public static MusicController Instance
     {
         get
@@ -31,11 +33,13 @@ public class MusicController : MonoBehaviour
     void Start()
     {
         PlayGameMusic();
+        isMuted = false;
+       
     }
 
     public void PlayGameMusic()
     {
-        if (source.isPlaying)
+       if (source.isPlaying)
         {
             source.Stop();
         }
@@ -53,8 +57,23 @@ public class MusicController : MonoBehaviour
         source.PlayOneShot(menuMusic);
     }
 
+    public void PlayInvincibleMusic()
+    {
+        if (source.isPlaying)
+        {
+
+            source.Stop();
+        }
+        source.PlayOneShot(invincibleMusic);
+    }
+
     void Update()
     {
         
+    }
+   public void Mute()
+    {
+       // isMuted = !isMuted;
+       // AudioListener.pause = isMuted;
     }
 }

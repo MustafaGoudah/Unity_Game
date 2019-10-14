@@ -130,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 18434748}
   - component: {fileID: 18434749}
+  - component: {fileID: 18434750}
   m_Layer: 5
   m_Name: Mute Music
   m_TagString: Untagged
@@ -198,13 +199,37 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1485238845}
-  toggleTransition: 1
+  toggleTransition: 0
   graphic: {fileID: 690367417}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
-  m_IsOn: 1
+      m_Calls:
+      - m_Target: {fileID: 18434750}
+        m_MethodName: Mute
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &18434750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18434747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407a2b5fc295b5547bd92ecbba9728ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMuted: 0
 --- !u!1 &255882038
 GameObject:
   m_ObjectHideFlags: 0

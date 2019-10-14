@@ -127,6 +127,7 @@ void Update()
             {
 
                 invincible = true;
+                gameController.inInvincibleMode = true;
                 boostMeter = 0;
                 Debug.Log("invincible now");
             }
@@ -142,6 +143,7 @@ void Update()
             {
                 invincible = false;
                 invincibleTimer = 10.0f;
+                gameController.Resume();
             }
             move();
         }
@@ -162,8 +164,12 @@ void Update()
                 OnBlueSphereCollected();
                 break;
             case "RedSphere":
-                audioSource.PlayOneShot(hitSound);
-                alive = false;
+                if (!invincible)
+                {
+                    audioSource.PlayOneShot(hitSound);
+                    alive = false;
+                    break;
+                }
                 break;
         }
 
